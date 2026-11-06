@@ -1,0 +1,32 @@
+# Dataset (download with the Phase 1 script, never commit)
+data/
+*.zip
+*.mat
+*.h5
+*.hdf5
+*.npy
+*.npz
+
+# Large model checkpoints (commit small final weights deliberately with `git add -f` if needed)
+*.pt
+*.pth
+*.ckpt
+checkpoints/
+runs/
+
+# Secrets
+.env
+*.key
+*secret*
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
