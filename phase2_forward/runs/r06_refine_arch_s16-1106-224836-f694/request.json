@@ -1,0 +1,10 @@
+{
+ "run_id": "r06_refine_arch_s16-1106-224836-f694",
+ "tag": "r06_refine_arch_s16",
+ "source_code": "phase2_forward/solutions/r06_refine_arch_s16.py",
+ "code_sha256": "28fee79cca8c959f0de9d8641781244dc167b8302685b86b3aaacbce69043631",
+ "k": 16000,
+ "max_train_seconds": 720.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T22:48:36-05:00"
+}

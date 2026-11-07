@@ -1,0 +1,10 @@
+{
+ "run_id": "r00_draft3_symconv-1106-205027-f578",
+ "tag": "r00_draft3_symconv",
+ "source_code": "phase2_forward/solutions/r00_draft3_symconv.py",
+ "code_sha256": "6ea31c211c4a60c3cbcef2bd9a18e90150b5b73557ec74b7a677735c429e8bc0",
+ "k": 500,
+ "max_train_seconds": 180.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T20:50:27-05:00"
+}

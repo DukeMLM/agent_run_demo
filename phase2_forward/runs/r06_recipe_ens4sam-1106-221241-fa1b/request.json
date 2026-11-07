@@ -1,0 +1,10 @@
+{
+ "run_id": "r06_recipe_ens4sam-1106-221241-fa1b",
+ "tag": "r06_recipe_ens4sam",
+ "source_code": "phase2_forward/solutions/r06_recipe_ens4sam.py",
+ "code_sha256": "dfe50ee43bf1d1d54f209ec68ee5abfd85741000a40e6c14612b31221ee5c834",
+ "k": 16000,
+ "max_train_seconds": 720.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T22:12:41-05:00"
+}

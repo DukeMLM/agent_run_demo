@@ -1,0 +1,10 @@
+{
+ "run_id": "r00_draft1_v4ens-1106-204849-adfc",
+ "tag": "r00_draft1_v4ens",
+ "source_code": "phase2_forward/solutions/r00_draft1_resmlp_v4ens.py",
+ "code_sha256": "ca0b765096a4d0e93046518a651a956a02da8b55e647d7fdd36ec5fdde151dc9",
+ "k": 500,
+ "max_train_seconds": 180.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T20:48:49-05:00"
+}

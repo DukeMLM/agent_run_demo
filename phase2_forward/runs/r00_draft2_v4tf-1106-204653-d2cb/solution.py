@@ -1,0 +1,217 @@
+"""V4-exact relational transformer over geometry tokens: 1 global token embedded from (h, p) and 4
+resonator tokens embedded by ONE shared GELU MLP from (rx_i, ry_i, theta_i, sin/cos 2theta_i,
+(rx_i-ry_i)cos/sin 2theta_i, rx_i+ry_i, h, p); n_layers pre-LN transformer blocks (d_model, 8 heads, GELU FFN
+4x, dropout) whose attention logits get a learned per-head bias indexed by the token-pair relation (resonators
+i,j: i XOR j = the supercell translation (12)(34)/(13)(24)/(14)(23) mapping i to j; 3 global<->resonator
+types), no absolute resonator positions, so the output is exactly invariant to sub-cell-shift permutations;
+head concat(global token, mean resonator token) -> 2x Linear-GELU(head_width) -> Linear(2001). Recipe:
+global_standard y, MSE, AdamW (no decay on norms/biases), time-aware cosine + warmup, grad clip 1, EMA; batch,
+lr, dropout, weight decay, width/depth and EMA scale with n_train in adapt_config (k=500: d 256, 3 layers,
+head 1024, 6.1M params, batch 64, lr 8.5e-4, wd 0.05, dropout 0.1; k=50k: d 384, 6 layers, head 1536, 17.6M
+params, batch 512).
+
+Physics prior: shifting the periodic 2x2 supercell by one sub-cell permutes the resonators by a double
+transposition whatever the index layout. With 0-based resonator indices these permutations are i -> i XOR g
+(g = 1, 2, 3), the Klein four-group V4 acting regularly on the resonators, and the relation of a resonator
+pair, i XOR j, is invariant under all of them. Attention that sees only these relations (plus per-token
+content) is V4-equivariant, and mean pooling over the resonator tokens makes the spectrum V4-invariant. A
+general transposition such as (1 2) alone changes the relations, so the model still distinguishes x-, y- and
+diagonal neighbours (which of the three classes is which is learned).
+"""
+import math
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+CONFIG = {
+    "epochs": 2600,              # generous cap; the time-aware cosine anneals by max_train_seconds
+    "batch_size": 64,
+    "lr": 8.5e-4,
+    "weight_decay": 0.05,
+    "optimizer": "adamw",
+    "betas": [0.9, 0.98],
+    "scheduler": "cosine",
+    "warmup_epochs": 38,
+    "min_lr_ratio": 0.01,
+    "time_aware_schedule": True,
+    "loss": "mse",
+    "grad_clip": 1.0,
+    "x_scaling": "minmax",       # column permutations of the resonator triples stay exact under minmax
+    "y_scaling": "global_standard",
+    "amp": False,
+    "tf32": True,
+    "ema_decay": 0.996,
+    "eval_every": 1,
+    "patience": 0,
+    # ---- model
+    "d_model": 256,
+    "n_heads": 8,
+    "n_layers": 3,
+    "ffn_mult": 4,
+    "embed_hidden": 256,
+    "dropout": 0.1,              # after each FFN branch
+    "attn_dropout": 0.0,
+    "head_width": 1024,
+    "head_dropout": 0.1,
+    "rel_bias_init": 1.0,        # head k starts with a soft preference for resonator relation k % 4
+    # ---- timing model used by adapt_config (solo GPU incl. the shared desktop load, measured with
+    #      `harness.py check --time-epochs` and a step micro-benchmark: about 7 ms + 3 ms per layer)
+    "est_step_base_s": 0.007,
+    "est_step_per_layer_s": 0.003,
+    "est_epoch_overhead_s": 0.01,
+    "warmup_steps": 300,
+}
+
+
+def adapt_config(cfg, n_train, max_train_seconds):
+    """Scale batch / lr / regularisation / capacity / EMA / warmup with n_train and the time budget."""
+    n = max(1, int(n_train))
+    S = float(max_train_seconds)
+    if n < 1500:
+        bs, drop, wd, d, L, hw = 64, 0.10, 0.05, 256, 3, 1024
+    elif n < 4000:
+        bs, drop, wd, d, L, hw = 64, 0.08, 0.03, 256, 3, 1024
+    elif n < 12000:
+        bs, drop, wd, d, L, hw = 128, 0.05, 0.02, 256, 4, 1024
+    elif n < 30000:
+        bs, drop, wd, d, L, hw = 256, 0.02, 0.01, 320, 4, 1536
+    else:
+        bs, drop, wd, d, L, hw = 512, 0.0, 0.01, 384, 6, 1536
+    cfg.update(batch_size=bs, dropout=drop, head_dropout=drop, weight_decay=wd,
+               d_model=d, n_layers=L, head_width=hw, embed_hidden=d)
+    cfg["lr"] = round(min(1.5e-3, 6e-4 * math.sqrt(bs / 32.0)), 6)
+    spe = math.ceil(n / bs)
+    est_step = float(cfg["est_step_base_s"]) + float(cfg["est_step_per_layer_s"]) * L
+    est_epoch = est_step * spe + float(cfg["est_epoch_overhead_s"])
+    # epoch cap = 2x the solo estimate, so the wall clock (time-aware cosine) drives the schedule
+    cfg["epochs"] = int(min(20000, max(100, 2.0 * S / est_epoch)))
+    # EMA horizon about 5 % of the steps expected under GPU sharing, within [100, 2000] steps
+    est_steps = 0.5 * (S / est_epoch) * spe
+    horizon = min(2000.0, max(100.0, 0.05 * est_steps))
+    cfg["ema_decay"] = round(1.0 - 1.0 / horizon, 6)
+    # warmup of about warmup_steps optimizer steps, at most 5 % of the epoch cap
+    cfg["warmup_epochs"] = round(max(1.0, min(0.05 * cfg["epochs"], float(cfg["warmup_steps"]) / spe)), 2)
+    return cfg
+
+
+# ----------------------------------------------------------------------------------------------- model
+N_REL = 7  # 0..3: resonator pair i XOR j; 4: global-global; 5: global query -> resonator key; 6: reverse
+
+
+def relation_matrix() -> torch.Tensor:
+    """(5, 5) relation-type index for the token order [global, res1, res2, res3, res4]."""
+    R = torch.zeros(5, 5, dtype=torch.long)
+    R[0, 0] = 4
+    R[0, 1:] = 5
+    R[1:, 0] = 6
+    for i in range(4):
+        for j in range(4):
+            R[1 + i, 1 + j] = i ^ j
+    return R
+
+
+class RelAttention(nn.Module):
+    """Multi-head self-attention with a learned per-head additive logit bias per relation type."""
+
+    def __init__(self, d, n_heads, attn_drop, bias_init):
+        super().__init__()
+        assert d % n_heads == 0, "d_model must be divisible by n_heads"
+        self.h, self.dh = n_heads, d // n_heads
+        self.qkv = nn.Linear(d, 3 * d)
+        self.proj = nn.Linear(d, d)
+        b = torch.zeros(n_heads, N_REL)
+        for k in range(n_heads):
+            b[k, k % 4] = bias_init
+        self.rel_bias = nn.Parameter(b)
+        self.attn_drop = float(attn_drop)
+
+    def forward(self, x, rel):
+        B, T, D = x.shape
+        q, k, v = self.qkv(x).view(B, T, 3, self.h, self.dh).permute(2, 0, 3, 1, 4).unbind(0)
+        att = (q @ k.transpose(-2, -1)) * (self.dh ** -0.5) + self.rel_bias[:, rel]
+        att = att.softmax(dim=-1)
+        if self.attn_drop > 0:
+            att = F.dropout(att, self.attn_drop, self.training)
+        y = (att @ v).transpose(1, 2).reshape(B, T, D)
+        return self.proj(y)
+
+
+class Block(nn.Module):
+    def __init__(self, d, n_heads, ffn_mult, drop, attn_drop, bias_init):
+        super().__init__()
+        self.n1 = nn.LayerNorm(d)
+        self.att = RelAttention(d, n_heads, attn_drop, bias_init)
+        self.n2 = nn.LayerNorm(d)
+        self.ff = nn.Sequential(nn.Linear(d, ffn_mult * d), nn.GELU(), nn.Linear(ffn_mult * d, d))
+        self.drop = nn.Dropout(drop)
+
+    def forward(self, x, rel):
+        x = x + self.att(self.n1(x), rel)
+        return x + self.drop(self.ff(self.n2(x)))
+
+
+def _mlp(i, h, o):
+    return nn.Sequential(nn.Linear(i, h), nn.GELU(), nn.Linear(h, o))
+
+
+class V4RelTransformer(nn.Module):
+    N_RES_FEAT = 10
+    N_GLOB_FEAT = 2
+
+    def __init__(self, in_dim, out_dim, cfg):
+        super().__init__()
+        assert in_dim == 14, "expects [h, p, rx1..4, ry1..4, theta1..4]"
+        d, eh, hw = int(cfg["d_model"]), int(cfg["embed_hidden"]), int(cfg["head_width"])
+        self.res_embed = _mlp(self.N_RES_FEAT, eh, d)     # shared by the 4 resonators
+        self.glob_embed = _mlp(self.N_GLOB_FEAT, eh, d)
+        self.blocks = nn.ModuleList([
+            Block(d, int(cfg["n_heads"]), int(cfg["ffn_mult"]), float(cfg["dropout"]),
+                  float(cfg["attn_dropout"]), float(cfg["rel_bias_init"]))
+            for _ in range(int(cfg["n_layers"]))])
+        self.norm = nn.LayerNorm(d)
+        hd = float(cfg["head_dropout"])
+        self.head = nn.Sequential(nn.Linear(2 * d, hw), nn.GELU(), nn.Dropout(hd),
+                                  nn.Linear(hw, hw), nn.GELU(), nn.Dropout(hd),
+                                  nn.Linear(hw, out_dim))
+        self.register_buffer("rel", relation_matrix())
+
+    @staticmethod
+    def features(x):
+        h, p = x[:, 0:1], x[:, 1:2]
+        rx, ry, th = x[:, 2:6], x[:, 6:10], x[:, 10:14]
+        a = th * (math.pi / 2)          # = 2 * theta (rad) under minmax scaling of theta in +-pi/4
+        s2, c2 = torch.sin(a), torch.cos(a)
+        dr = rx - ry
+        res = torch.stack([rx, ry, th, s2, c2, dr * c2, dr * s2, rx + ry,
+                           h.expand(-1, 4), p.expand(-1, 4)], dim=-1)          # (B, 4, 10)
+        glob = torch.cat([h, p], dim=1)                                          # (B, 2)
+        return res, glob
+
+    def forward(self, x):
+        res, glob = self.features(x)
+        tok = torch.cat([self.glob_embed(glob)[:, None, :], self.res_embed(res)], dim=1)  # (B, 5, d)
+        for blk in self.blocks:
+            tok = blk(tok, self.rel)
+        tok = self.norm(tok)
+        pooled = torch.cat([tok[:, 0], tok[:, 1:].mean(dim=1)], dim=-1)
+        return self.head(pooled)
+
+
+def build_model(in_dim, out_dim, cfg):
+    return V4RelTransformer(in_dim, out_dim, cfg)
+
+
+def make_optimizer(model, cfg):
+    decay, no_decay = [], []
+    for name, p in model.named_parameters():
+        if not p.requires_grad:
+            continue
+        (no_decay if (p.ndim < 2 or "rel_bias" in name) else decay).append(p)
+    groups = [{"params": decay, "weight_decay": float(cfg["weight_decay"])},
+              {"params": no_decay, "weight_decay": 0.0}]
+    kw = dict(lr=float(cfg["lr"]), betas=tuple(cfg["betas"]))
+    try:
+        return torch.optim.AdamW(groups, fused=True, **kw)
+    except Exception:  # noqa: BLE001 - fused kernel unavailable
+        return torch.optim.AdamW(groups, **kw)

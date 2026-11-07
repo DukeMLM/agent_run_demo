@@ -1,0 +1,10 @@
+{
+ "run_id": "r06_improve_patchhead-1106-220617-bcd5",
+ "tag": "r06_improve_patchhead",
+ "source_code": "phase2_forward/solutions/r06_improve_patchhead.py",
+ "code_sha256": "dc51107952eba6fcd7df0dd3dfec22ad2dc8d7e8752a643d23d1b7c6e91417ed",
+ "k": 16000,
+ "max_train_seconds": 720.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T22:06:17-05:00"
+}

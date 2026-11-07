@@ -1,0 +1,10 @@
+{
+ "run_id": "r00_draft1_v4flip-1106-204849-4976",
+ "tag": "r00_draft1_v4flip",
+ "source_code": "phase2_forward/solutions/r00_draft1_resmlp_v4flip.py",
+ "code_sha256": "7c94c0abe10e479514f8b63d66b7e3e5ca604d49d6b87e251a1bc393926cd7c7",
+ "k": 500,
+ "max_train_seconds": 180.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T20:48:49-05:00"
+}

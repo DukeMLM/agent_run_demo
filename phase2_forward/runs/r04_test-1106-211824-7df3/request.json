@@ -1,0 +1,10 @@
+{
+ "run_id": "r04_test-1106-211824-7df3",
+ "tag": "r04_test",
+ "source_code": "phase2_forward/runs/r03_test-1106-211209-b002/solution.py",
+ "code_sha256": "f86849c7f416dca45b964f3b47aaa4ead2190565a0bda64d36b674611327bdbb",
+ "k": 8000,
+ "max_train_seconds": 480.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T21:18:24-05:00"
+}

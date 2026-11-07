@@ -1,0 +1,10 @@
+{
+ "run_id": "r06_refine_hparam_nodrop-1106-223924-7d38",
+ "tag": "r06_refine_hparam_nodrop",
+ "source_code": "phase2_forward/solutions/r06_refine_hparam_nodrop.py",
+ "code_sha256": "f1901f22cfa55298a08d6e8a6764e682cbcc92468dc48888e953e52797e43c22",
+ "k": 16000,
+ "max_train_seconds": 720.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T22:39:24-05:00"
+}

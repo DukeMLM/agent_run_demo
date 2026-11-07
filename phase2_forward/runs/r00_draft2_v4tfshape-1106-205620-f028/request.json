@@ -1,0 +1,10 @@
+{
+ "run_id": "r00_draft2_v4tfshape-1106-205620-f028",
+ "tag": "r00_draft2_v4tfshape",
+ "source_code": "phase2_forward/solutions/r00_draft2_v4tfshape.py",
+ "code_sha256": "f86849c7f416dca45b964f3b47aaa4ead2190565a0bda64d36b674611327bdbb",
+ "k": 500,
+ "max_train_seconds": 180.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T20:56:20-05:00"
+}

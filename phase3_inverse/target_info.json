@@ -1,0 +1,21 @@
+{
+ "description": "Pre-registered inverse-design target (Phase 1, seed 0): a held-out test spectrum simulated with CST. The geometry below is for reference only and is never given to the Neural-Adjoint optimizer.",
+ "source": "ADM/testset/test_s.csv row 1546 (0-based, no header)",
+ "test_index": 1546,
+ "ground_truth_geometry": {
+  "h": 0.375,
+  "p": 1.125,
+  "rx1": 0.13750000298023224,
+  "rx2": 0.20000000298023224,
+  "rx3": 0.125,
+  "rx4": 0.125,
+  "ry1": 0.11249999701976776,
+  "ry2": 0.1875,
+  "ry3": 0.15000000596046448,
+  "ry4": 0.125,
+  "theta1": -0.3926999866962432,
+  "theta2": 0.3926999866962432,
+  "theta3": 0.3926999866962432,
+  "theta4": -0.7853999733924864
+ }
+}

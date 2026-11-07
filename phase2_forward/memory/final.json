@@ -1,0 +1,17 @@
+{
+ "round": 6,
+ "role": "explore",
+ "run_id": "r06_explore_patchxattn_s32-1106-221446-49f4",
+ "code": "phase2_forward/runs/r06_explore_patchxattn_s32-1106-221446-49f4/solution.py",
+ "source": "phase2_forward/solutions/r06_explore_patchxattn_s32.py",
+ "k": 16000,
+ "val_mse": 0.0006633598574324239,
+ "n_params": 6164769,
+ "train_time_s": 720.23,
+ "architecture": "Improve of r06_explore_patchxattn with one change: finer spectral patches, S=32 (63 patch query tokens, renderer Linear(d->64), overlap-add stride 32). Otherwise identical: V4-relation-biased 5-token geometry encoder (2 blocks), 4-block patch decoder [self-attention with relative-position bias, cross-attention to the geometry tokens, FFN 4x], d 256, 8 heads, 6.2M params. Training: global_standard y, MSE, flip augmentation, AdamW lr 1e-3, batch 256, wd 0.05, time-aware cosine, clip 1, EMA, dropout 0.1, bf16.",
+ "is_baseline": false,
+ "insight": "At k=16000, swapping the incumbent's 2x1536 MLP head for an attention decoder cut val MSE from 1.72e-3 to 8.3e-4 with S=64 patches and to 6.6e-4 with S=32 patches, at 6.2M params; in that decoder, spectral patch tokens cross-attend to the V4-invariant geometry tokens and to each other, and one linear renderer is shared across all patches. The S=32 run was better at every matched epoch, and the gain came mostly from mid-scale resonance structure, while the sharpest narrow peaks remain the main residual (54% of squared error sits at the 10% steepest points); a checkpoint diagnostic showed the incumbent had already learned the angle-flip symmetry (averaging flipped predictions gained only 0.5%).",
+ "loop_end": "2026-11-06T23:06:09-05:00",
+ "stop_reason": "done",
+ "rounds": 6
+}

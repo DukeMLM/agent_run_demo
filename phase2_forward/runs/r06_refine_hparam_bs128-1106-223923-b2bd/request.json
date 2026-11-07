@@ -1,0 +1,10 @@
+{
+ "run_id": "r06_refine_hparam_bs128-1106-223923-b2bd",
+ "tag": "r06_refine_hparam_bs128",
+ "source_code": "phase2_forward/solutions/r06_refine_hparam_bs128.py",
+ "code_sha256": "8aa0877b24acaf3481488c75719131b6686043529c63e4ccaef0903bf1bcef1e",
+ "k": 16000,
+ "max_train_seconds": 720.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T22:39:23-05:00"
+}

@@ -1,0 +1,71 @@
+{
+ "k_current": 16000,
+ "acquisitions": [
+  {
+   "k_prev": 0,
+   "k_new": 500,
+   "added": 500,
+   "added_train": 455,
+   "added_val": 45,
+   "n_train": 455,
+   "n_val": 45,
+   "at": "2026-11-06T20:35:19-05:00",
+   "note": "round 0 draft1"
+  },
+  {
+   "k_prev": 500,
+   "k_new": 1000,
+   "added": 500,
+   "added_train": 455,
+   "added_val": 45,
+   "n_train": 910,
+   "n_val": 90,
+   "at": "2026-11-06T21:02:21-05:00",
+   "note": "round 1 test"
+  },
+  {
+   "k_prev": 1000,
+   "k_new": 2000,
+   "added": 1000,
+   "added_train": 909,
+   "added_val": 91,
+   "n_train": 1819,
+   "n_val": 181,
+   "at": "2026-11-06T21:07:53-05:00",
+   "note": "round 2 test"
+  },
+  {
+   "k_prev": 2000,
+   "k_new": 4000,
+   "added": 2000,
+   "added_train": 1818,
+   "added_val": 182,
+   "n_train": 3637,
+   "n_val": 363,
+   "at": "2026-11-06T21:12:09-05:00",
+   "note": "round 3 test"
+  },
+  {
+   "k_prev": 4000,
+   "k_new": 8000,
+   "added": 4000,
+   "added_train": 3636,
+   "added_val": 364,
+   "n_train": 7273,
+   "n_val": 727,
+   "at": "2026-11-06T21:18:23-05:00",
+   "note": "round 4 test"
+  },
+  {
+   "k_prev": 8000,
+   "k_new": 16000,
+   "added": 8000,
+   "added_train": 7273,
+   "added_val": 727,
+   "n_train": 14546,
+   "n_val": 1454,
+   "at": "2026-11-06T21:27:57-05:00",
+   "note": "round 5 test"
+  }
+ ]
+}
