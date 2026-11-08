@@ -1,0 +1,69 @@
+[
+ {
+  "round": 1,
+  "action": "test",
+  "k_new": 1000,
+  "reason": "At k=500 the incumbent memorises the train split (train MSE ~2e-5) while val MSE stalls at 5.0e-3, so it is data-limited rather than capacity-limited. Re-test code_latest unchanged on a 2x larger data set (k=1000) to measure the first MSE-vs-size slope before spending more simulations.",
+  "history_check": "ok",
+  "applied_action": "test",
+  "applied_k": 1000,
+  "rule_notes": []
+ },
+ {
+  "round": 2,
+  "action": "test",
+  "k_new": 2000,
+  "reason": "Doubling the data from 500 to 1000 cut val MSE by only 9% (5.02e-3 to 4.57e-3, dMSE/dsample about -9e-7), but the incumbent still memorises its train split, so it is data-limited rather than capacity-limited. With only about 45 and 91 validation samples, this first slope is too noisy to call saturation, so re-test code_latest on 2x data (k=2000) to confirm the MSE-vs-size trend before regenerating code.",
+  "history_check": "ok",
+  "applied_action": "test",
+  "applied_k": 2000,
+  "rule_notes": []
+ },
+ {
+  "round": 3,
+  "action": "test",
+  "k_new": 4000,
+  "reason": "Doubling the data from 1000 to 2000 cut val MSE by 28% (4.57e-3 to 3.30e-3). That is dMSE/dsample of about -1.3e-6, steeper than the -9e-7 of the previous doubling (local power-law exponent about -0.47), so the incumbent is still data-limited and adding data is still efficient. Re-test code_latest unchanged on a 2x larger data set (k=4000, projected val MSE about 2.4-2.7e-3); the 180 s run budget still allows roughly 250 epochs there.",
+  "history_check": "ok",
+  "applied_action": "test",
+  "applied_k": 4000,
+  "rule_notes": []
+ },
+ {
+  "round": 4,
+  "action": "test",
+  "k_new": 8000,
+  "reason": "Doubling the data from 2000 to 4000 still cut val MSE by 25% (3.30e-3 to 2.48e-3; dMSE/dsample about -4.1e-7, local power-law exponent -0.41 vs -0.47 for the previous doubling), so the incumbent remains efficiently data-limited with only mild diminishing returns. Re-test code_latest unchanged on a 2x larger data set (k=8000), where the power-law trend projects about 1.9e-3, below the 2.0e-3 strict target.",
+  "history_check": "ok",
+  "applied_action": "test",
+  "applied_k": 8000,
+  "rule_notes": []
+ },
+ {
+  "round": 5,
+  "action": "test",
+  "k_new": 16000,
+  "reason": "Doubling the data from 4000 to 8000 still cut val MSE by 22% (2.48e-3 to 1.93e-3; dMSE/dsample about -1.4e-7; local power-law exponent -0.36, after -0.41 and -0.47 for the two doublings before), so the strict target is met and adding data is still efficient, with only slowly diminishing returns. Re-test code_latest unchanged at k=16000 (2x, projected val MSE about 1.50-1.56e-3) before spending a generate round, and switch to generate once a doubling gives clearly less than about 15%.",
+  "history_check": "ok",
+  "applied_action": "test",
+  "applied_k": 16000,
+  "rule_notes": []
+ },
+ {
+  "round": 6,
+  "action": "generate",
+  "k_new": 16000,
+  "reason": "Doubling the data from 8000 to 16000 cut val MSE by only 11% (1.93e-3 to 1.72e-3; dMSE/dsample about -2.6e-8, 5x lower than the previous doubling; local power-law exponent fell from -0.36 to -0.16), and extrapolating this trend over the full 50000 budget gives only about 1.43e-3, short of the 1.3e-3 stretch goal. Diminishing returns suggest the incumbent is saturating, so regenerate code with AIDE at k=16000 before acquiring more samples.",
+  "history_check": "ok",
+  "applied_action": "generate",
+  "applied_k": 16000,
+  "rule_notes": []
+ },
+ {
+  "round": 7,
+  "action": "done",
+  "k_new": 16000,
+  "reason": "Target reached: at k=16,000 the generated S=32 patch cross-attention decoder lowered val MSE from 1.72e-3 to 6.63e-4. That is 3.0x below the strict bound and 2.0x below the 1.3e-3 stretch goal, and all five refinements of it also stayed below 1e-3 (7.3e-4 to 9.9e-4), so the result holds up and the remaining 34,000 CST simulations are not needed; stop and return code_latest.",
+  "history_check": "ok"
+ }
+]

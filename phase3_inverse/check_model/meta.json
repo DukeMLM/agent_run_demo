@@ -1,0 +1,313 @@
+{
+ "role": "independent check model for Neural_Adjoint designs (proxy for re-simulation; no CST model of the ADM cell is available)",
+ "model_name": "ForwardModel",
+ "network_class": "EnsV4RelTransformer",
+ "source_run_id": "r06_recipe_ens4wd-1106-215908-6c5a",
+ "source_tag": "r06_recipe_ens4wd",
+ "source_code": "phase2_forward/runs/r06_recipe_ens4wd-1106-215908-6c5a/solution.py",
+ "source_code_sha256": "b6cbac8df72f5c7d98de093d93726d49599da40028fecd1d830c51ae634dbef5",
+ "source_checkpoint": "phase2_forward/runs/r06_recipe_ens4wd-1106-215908-6c5a/best_model.pt",
+ "source_checkpoint_sha256": "a1d7217b411c5037cfde32fb368b628a2ffda00216cb9ae6a14bb5e07329dddb",
+ "source_scaler": "phase2_forward/runs/r06_recipe_ens4wd-1106-215908-6c5a/scaler.json",
+ "source_result": "phase2_forward/runs/r06_recipe_ens4wd-1106-215908-6c5a/result.json",
+ "k": 16000,
+ "n_train": 14546,
+ "n_val": 1454,
+ "phase2_val_mse": 0.001502999378406064,
+ "n_params": 46251716,
+ "n_params_in_state_dict": 46251716,
+ "best_epoch": 75,
+ "epochs_run": 292,
+ "train_time_s": 720.06,
+ "stop_reason": "time_limit",
+ "architecture": "Batched deep ensemble (K=4 members in one module) of the V4-exact relational transformer with a global MLP head (EnsV4RelTransformer): per member 1 global (h,p) token + 4 resonator tokens (shared GELU-MLP embedding of ellipse shape-tensor invariants), 4 pre-LN self-attention blocks (d_model 320, 8 heads, FFN 4x) with per-head V4-relation logit biases, mean pool, head concat(global, mean resonator) -> 2x Linear-GELU(1536) -> Linear(2001) emitting all 2001 points at once; output = member mean; 46.25M params. global_standard y scaling, minmax x scaling to [-1,1]. Trained 720 s (292 epochs, best epoch 75) with AdamW lr 1.5e-3, effective weight decay 0.1015, batch 256, dropout 0.02, EMA, grad clip 0.5, fp32/TF32 training, no flip augmentation; evaluated in fp32.",
+ "family": "4-member deep ensemble of the V4 relational transformer + global MLP head",
+ "selection": {
+  "rule": "best successful run at the final k (= 16000) whose architecture family differs from the final model's (different block type / backbone, not a hyperparameter variant)",
+  "final_model_run_id": "r06_explore_patchxattn_s32-1106-221446-49f4",
+  "final_model_family": "patch cross-attention encoder-decoder transformer (PatchXAttnTransformer)",
+  "n_runs_at_final_k": 12,
+  "n_different_family_runs_at_final_k": 5,
+  "candidates_at_final_k": [
+   {
+    "run_id": "r06_explore_patchxattn_s32-1106-221446-49f4",
+    "tag": "r06_explore_patchxattn_s32",
+    "val_mse": 0.0006633598574324239,
+    "n_params": 6164769,
+    "family": "patch cross-attention encoder-decoder transformer (PatchXAttnTransformer)",
+    "same_family_as_final": true,
+    "in_archive": true
+   },
+   {
+    "run_id": "r06_refine_arch_adaln-1106-224836-b5cf",
+    "tag": "r06_refine_arch_adaln",
+    "val_mse": 0.0007274295192376437,
+    "n_params": 8664865,
+    "family": "patch cross-attention encoder-decoder transformer (PatchXAttnTransformer)",
+    "same_family_as_final": true,
+    "in_archive": true
+   },
+   {
+    "run_id": "r06_refine_arch_s16-1106-224836-f694",
+    "tag": "r06_refine_arch_s16",
+    "val_mse": 0.0007450610733310208,
+    "n_params": 6176705,
+    "family": "patch cross-attention encoder-decoder transformer (PatchXAttnTransformer)",
+    "same_family_as_final": true,
+    "in_archive": true
+   },
+   {
+    "run_id": "r06_explore_patchxattn-1106-215815-3dce",
+    "tag": "r06_explore_patchxattn",
+    "val_mse": 0.0008335158017183044,
+    "n_params": 6171297,
+    "family": "patch cross-attention encoder-decoder transformer (PatchXAttnTransformer)",
+    "same_family_as_final": true,
+    "in_archive": true
+   },
+   {
+    "run_id": "r06_refine_hparam_bs128-1106-223923-b2bd",
+    "tag": "r06_refine_hparam_bs128",
+    "val_mse": 0.0008501633778909842,
+    "n_params": 6164769,
+    "family": "patch cross-attention encoder-decoder transformer (PatchXAttnTransformer)",
+    "same_family_as_final": true,
+    "in_archive": true
+   },
+   {
+    "run_id": "r06_refine_hparam_lr2e3-1106-223923-0918",
+    "tag": "r06_refine_hparam_lr2e3",
+    "val_mse": 0.0008836345073374895,
+    "n_params": 6164769,
+    "family": "patch cross-attention encoder-decoder transformer (PatchXAttnTransformer)",
+    "same_family_as_final": true,
+    "in_archive": true
+   },
+   {
+    "run_id": "r06_refine_hparam_nodrop-1106-223924-7d38",
+    "tag": "r06_refine_hparam_nodrop",
+    "val_mse": 0.0009883983768471602,
+    "n_params": 6164769,
+    "family": "patch cross-attention encoder-decoder transformer (PatchXAttnTransformer)",
+    "same_family_as_final": true,
+    "in_archive": true
+   },
+   {
+    "run_id": "r06_recipe_ens4wd-1106-215908-6c5a",
+    "tag": "r06_recipe_ens4wd",
+    "val_mse": 0.001502999378406064,
+    "n_params": 46251716,
+    "family": "4-member deep ensemble of the V4 relational transformer + global MLP head",
+    "same_family_as_final": false,
+    "in_archive": true
+   },
+   {
+    "run_id": "r06_improve_ens4-1106-215044-9f72",
+    "tag": "r06_improve_ens4",
+    "val_mse": 0.0015100711624861359,
+    "n_params": 46251716,
+    "family": "4-member deep ensemble of the V4 relational transformer + global MLP head",
+    "same_family_as_final": false,
+    "in_archive": true
+   },
+   {
+    "run_id": "r06_improve_patchhead-1106-220617-bcd5",
+    "tag": "r06_improve_patchhead",
+    "val_mse": 0.0015991014705597538,
+    "n_params": 12706912,
+    "family": "V4 relational transformer encoder + shared-renderer patch MLP head (no attention decoder)",
+    "same_family_as_final": false,
+    "in_archive": true
+   },
+   {
+    "run_id": "r05_test-1106-212757-fd88",
+    "tag": "r05_test",
+    "val_mse": 0.0017224353684278423,
+    "n_params": 11562929,
+    "family": "V4 relational transformer + global MLP head (single model)",
+    "same_family_as_final": false,
+    "in_archive": false
+   },
+   {
+    "run_id": "r06_recipe_ens4sam-1106-221241-fa1b",
+    "tag": "r06_recipe_ens4sam",
+    "val_mse": 0.0018237770876248591,
+    "n_params": 46251716,
+    "family": "4-member deep ensemble of the V4 relational transformer + global MLP head",
+    "same_family_as_final": false,
+    "in_archive": true
+   }
+  ],
+  "chosen_run_id": "r06_recipe_ens4wd-1106-215908-6c5a",
+  "why": "r06_recipe_ens4wd-1106-215908-6c5a (4-member deep ensemble of the V4 relational transformer + global MLP head, val MSE 1.5030e-03) is the lowest-error k=16000 run outside the patch cross-attention encoder-decoder transformer (PatchXAttnTransformer) family. Its decoder is a different block type (a global MLP head emitting all 2001 points, no spectral tokens, no attention over frequency) and it is a 4-member deep ensemble (d_model 320, 4 encoder blocks), trained with a different recipe (fp32/TF32, no flip augmentation, effective weight decay 0.1015). Shared with the final model: the V4-relation-biased geometry-token encoder design and shape-tensor features, and the same D_16000 training split and scalers, so it is an independently trained proxy, not independent data."
+ },
+ "solution_snapshot_identical_to_source": true,
+ "scaler_identical_to_na_model_source": true,
+ "interface": {
+  "loader": "forward_model.py: load_forward_model(model_dir: str, device) -> ForwardModel (eval mode)",
+  "input": "raw geometry g (B, 14) float32 in the order h, p, rx1, rx2, rx3, rx4, ry1, ry2, ry3, ry4, theta1, theta2, theta3, theta4",
+  "output": "raw absorptivity (B, 2001) float32",
+  "differentiable_wrt_input": true,
+  "scaling_inside_model": "x_scaled = (g_raw - x_shift) / x_scale ; y_raw = y_model * y_scale + y_shift   (x minmax: x_shift = (x_min + x_max) / 2, x_scale = (x_max - x_min) / 2, i.e. the training range maps to [-1, 1]; y global_standard: y_shift = mean, y_scale = std of all training absorptivity values, the same for all 2001 points)"
+ },
+ "files": {
+  "forward_model.py": "self-contained model code: network (verbatim copy of the Phase 2 model section) + ForwardModel wrapper + load_forward_model",
+  "forward_model.pt": "dict {format, network_class, in_dim, out_dim, config, state_dict, source_*}; state_dict keys and tensors identical to the source checkpoint",
+  "scaler.json": "x_min, x_max, x_shift, x_scale, y_shift, y_scale, formula",
+  "meta.json": "this file"
+ },
+ "network_code": {
+  "source": "phase2_forward/runs/r06_recipe_ens4wd-1106-215908-6c5a/solution.py",
+  "source_lines": [
+   115,
+   265
+  ],
+  "n_lines": 151,
+  "verbatim": true,
+  "imports": [
+   "import json",
+   "import math",
+   "from pathlib import Path",
+   "import torch",
+   "import torch.nn as nn",
+   "import torch.nn.functional as F"
+  ]
+ },
+ "network_config": {
+  "epochs": 1317,
+  "batch_size": 256,
+  "lr": 0.0015,
+  "weight_decay": 0.1015,
+  "optimizer": "adamw",
+  "betas": [
+   0.9,
+   0.98
+  ],
+  "momentum": 0.9,
+  "scheduler": "cosine",
+  "warmup_epochs": 5.26,
+  "min_lr_ratio": 0.01,
+  "pct_start": 0.3,
+  "step_size": 50,
+  "gamma": 0.5,
+  "plateau_factor": 0.5,
+  "plateau_patience": 10,
+  "loss": "mse",
+  "smooth_l1_beta": 0.01,
+  "huber_delta": 0.01,
+  "grad_clip": 0.5,
+  "x_scaling": "minmax",
+  "y_scaling": "global_standard",
+  "amp": false,
+  "tf32": true,
+  "ema_decay": 0.998935,
+  "eval_every": 1,
+  "patience": 0,
+  "time_aware_schedule": true,
+  "seed": 0,
+  "n_members": 4,
+  "wd_tau_frac": 0.35,
+  "wd_min": 0.02,
+  "wd_max": 0.3,
+  "d_model": 320,
+  "n_heads": 8,
+  "n_layers": 4,
+  "ffn_mult": 4,
+  "embed_hidden": 320,
+  "dropout": 0.02,
+  "attn_dropout": 0.0,
+  "head_width": 1536,
+  "head_dropout": 0.02,
+  "rel_bias_init": 1.0,
+  "est_step_base_s": 0.007,
+  "est_step_per_layer_s": 0.003,
+  "est_epoch_overhead_s": 0.01,
+  "warmup_steps": 300
+ },
+ "network_config_note": "copy for reference; load_forward_model reads the identical copy stored in forward_model.pt and seeds torch with config['seed'] before building the network",
+ "exported_by": "Modifier agent (Code_Modify tool, Phase 3)",
+ "exported_at": "2026-11-07T00:05:08-05:00",
+ "export_validation": {
+  "validated_at": "2026-11-07T00:07:04-05:00",
+  "loader": "phase3_inverse/check_model/forward_model.py:load_forward_model (only)",
+  "model_load_time_s": 0.333,
+  "n_params_loaded": 46251716,
+  "k": 16000,
+  "n_train": 14546,
+  "n_val": 1454,
+  "split": "D_k = first k rows of data/processed/pool_{g,s}.npy; validation iff position % 11 == 10",
+  "precision": "fp32, TF32 disabled (cuda.matmul and cudnn), fp64 reduction; eval batch 2048 as the harness",
+  "val_mse_export": 0.001502999378406064,
+  "val_mse_phase2": 0.001502999378406064,
+  "rel_diff": 0.0,
+  "rel_diff_tolerance": 1e-05,
+  "val_mse_match": true,
+  "val_mse_export_batch256": 0.001502999378406064,
+  "val_per_sample_mse_median": 0.0013609876918543322,
+  "val_per_sample_mse_max": 0.0054003836454163245,
+  "x_range_equals_train_split_range": true,
+  "grad_check_fp32": {
+   "batch": 64,
+   "output_dtype": "torch.float32",
+   "finite": true,
+   "grad_norm": 26315.921875,
+   "min_per_sample_grad_norm": 1672.694580078125,
+   "fraction_nonzero_entries": 0.9587054252624512,
+   "n_input_dims_with_nonzero_grad": 14,
+   "ok": true
+  },
+  "grad_check_bf16_autocast": {
+   "batch": 64,
+   "output_dtype": "torch.float32",
+   "finite": true,
+   "grad_norm": 26242.91015625,
+   "min_per_sample_grad_norm": 1668.903076171875,
+   "fraction_nonzero_entries": 0.9587054252624512,
+   "n_input_dims_with_nonzero_grad": 14,
+   "ok": true
+  },
+  "finite_difference_check": {
+   "precision": "float64 copy of the loaded ForwardModel",
+   "n_geometries": 4,
+   "direction": "v = randn * x_scale (seed 0)",
+   "autograd_directional_derivative": -394.19287447799826,
+   "central_differences": [
+    {
+     "eps": 0.0001,
+     "finite_difference": -394.19298399479885,
+     "rel_err": 2.7782534199856855e-07
+    },
+    {
+     "eps": 1e-05,
+     "finite_difference": -394.1928755011758,
+     "rel_err": 2.595626719925769e-09
+    },
+    {
+     "eps": 1e-06,
+     "finite_difference": -394.19287440978223,
+     "rel_err": 1.730524046915095e-10
+    }
+   ],
+   "best_rel_err": 1.730524046915095e-10,
+   "max_abs_output_diff_fp64_vs_fp32": 6.811191603506295e-07
+  },
+  "gpu": "NVIDIA GeForce RTX 4080 SUPER",
+  "torch": "2.5.1+cu121",
+  "na_tool_smoke_test": {
+   "loader": "framework/neural_adjoint.py:load_model_dir (calls load_forward_model; output-shape check)",
+   "load_ok": true,
+   "load_time_s": 0.182,
+   "x_min_x_max_from_scaler_json": true,
+   "target": "validation spectrum #0 of D_k (pool position 10), NOT the Phase 3 target",
+   "hp": "WARMUP_HP (n_init 64, 5 bf16 Adam steps, polish top 8 x 3 fp32 steps)",
+   "best_mse": 0.004395082559042511,
+   "best_mse_stage1": 0.004433173445164268,
+   "median_candidate_mse": 0.014406720319018016,
+   "finite": true,
+   "best_geometry_inside_domain": true,
+   "surrogate_mse_of_true_geometry": 0.001555947152955651,
+   "inference_time_s": 2.0445940000063274
+  },
+  "all_checks_passed": true
+ }
+}

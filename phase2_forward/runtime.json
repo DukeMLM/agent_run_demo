@@ -1,0 +1,92 @@
+{
+ "phase": "Phase 2 Forward_Train",
+ "start": "2026-11-06T20:22:04-05:00",
+ "loop_end": "2026-11-06T23:06:09-05:00",
+ "stop_reason": "done",
+ "phase2_wall_clock_s": 9845.0,
+ "phase2_wall_clock_hms": "2:44:05",
+ "gpu_training_time": {
+  "total_train_time_s": 10884.91,
+  "total_train_time_hms": "3:01:25",
+  "done_runs_train_time_s": 10884.91,
+  "failed_runs_train_time_s": 0,
+  "n_runs": 22,
+  "n_done": 22,
+  "n_failed": 0,
+  "total_setup_time_s": 63.4,
+  "total_queue_time_s": 350.51,
+  "by_round": {
+   "0": {
+    "runs": 6,
+    "train_time_s": 1080.59,
+    "train_time_hms": "0:18:01"
+   },
+   "1": {
+    "runs": 1,
+    "train_time_s": 180.03,
+    "train_time_hms": "0:03:00"
+   },
+   "2": {
+    "runs": 1,
+    "train_time_s": 180.23,
+    "train_time_hms": "0:03:00"
+   },
+   "3": {
+    "runs": 1,
+    "train_time_s": 300.72,
+    "train_time_hms": "0:05:01"
+   },
+   "4": {
+    "runs": 1,
+    "train_time_s": 481.12,
+    "train_time_hms": "0:08:01"
+   },
+   "5": {
+    "runs": 1,
+    "train_time_s": 720.46,
+    "train_time_hms": "0:12:00"
+   },
+   "6": {
+    "runs": 11,
+    "train_time_s": 7941.76,
+    "train_time_hms": "2:12:22"
+   }
+  },
+  "runs_per_k": {
+   "500": 6,
+   "1000": 1,
+   "2000": 1,
+   "4000": 1,
+   "8000": 1,
+   "16000": 12
+  },
+  "first_submitted_at": "2026-11-06T20:46:53-05:00",
+  "last_finished_at": "2026-11-06T23:03:44-05:00",
+  "note": "Sum of harness train_time_s over every ledger record (done and failed). It exceeds the wall clock because up to 3 harness runs train concurrently on the single RTX 4080 SUPER."
+ },
+ "final_model": {
+  "run_id": "r06_explore_patchxattn_s32-1106-221446-49f4",
+  "train_time_s": 720.23,
+  "train_time_hms": "0:12:00",
+  "max_train_seconds": 720.0,
+  "epochs_run": 229,
+  "sec_per_epoch": 3.022,
+  "setup_time_s": 2.45
+ },
+ "counts": {
+  "rounds_after_initialization": 6,
+  "history_events_incl_round0": 7,
+  "generate_actions_total": 2,
+  "generate_actions_after_initialization": 1,
+  "test_actions": 5,
+  "controller_decisions": 7,
+  "final_decision": "done",
+  "aide_nodes_in_archive": 17,
+  "aide_nodes_by_round": {
+   "0": 6,
+   "6": 11
+  },
+  "trained_candidates_in_ledger": 22,
+  "k_final": 16000
+ }
+}

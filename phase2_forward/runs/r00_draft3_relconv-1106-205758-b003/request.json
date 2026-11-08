@@ -1,0 +1,10 @@
+{
+ "run_id": "r00_draft3_relconv-1106-205758-b003",
+ "tag": "r00_draft3_relconv",
+ "source_code": "phase2_forward/solutions/r00_draft3_relconv.py",
+ "code_sha256": "462609f049ee8897eeb09189fe3238b80db9ec6b9cc76a644e15a222100c8532",
+ "k": 500,
+ "max_train_seconds": 180.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T20:57:58-05:00"
+}

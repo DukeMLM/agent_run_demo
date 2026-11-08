@@ -1,0 +1,10 @@
+{
+ "run_id": "r06_explore_patchxattn_s32-1106-221446-49f4",
+ "tag": "r06_explore_patchxattn_s32",
+ "source_code": "phase2_forward/solutions/r06_explore_patchxattn_s32.py",
+ "code_sha256": "6c81ed151f26e423cc0591a2dd04d31be043c97fac004a086f14b34240c5966b",
+ "k": 16000,
+ "max_train_seconds": 720.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T22:14:46-05:00"
+}

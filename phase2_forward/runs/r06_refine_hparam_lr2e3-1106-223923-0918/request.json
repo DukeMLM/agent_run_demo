@@ -1,0 +1,10 @@
+{
+ "run_id": "r06_refine_hparam_lr2e3-1106-223923-0918",
+ "tag": "r06_refine_hparam_lr2e3",
+ "source_code": "phase2_forward/solutions/r06_refine_hparam_lr2e3.py",
+ "code_sha256": "319d70857a30c479f4b84810555eacda032f044321c3d24bf34f15bb6fb571f1",
+ "k": 16000,
+ "max_train_seconds": 720.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T22:39:23-05:00"
+}

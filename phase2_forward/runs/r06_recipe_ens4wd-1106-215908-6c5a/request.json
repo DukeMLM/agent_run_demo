@@ -1,0 +1,10 @@
+{
+ "run_id": "r06_recipe_ens4wd-1106-215908-6c5a",
+ "tag": "r06_recipe_ens4wd",
+ "source_code": "phase2_forward/solutions/r06_recipe_ens4wd.py",
+ "code_sha256": "b6cbac8df72f5c7d98de093d93726d49599da40028fecd1d830c51ae634dbef5",
+ "k": 16000,
+ "max_train_seconds": 720.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T21:59:08-05:00"
+}

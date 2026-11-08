@@ -1,0 +1,86 @@
+[
+ {
+  "round": 0,
+  "k": 500,
+  "val_mse": 0.0050244145053921,
+  "action": "generate",
+  "reason": "Initialization",
+  "run_id": "r00_draft2_v4tfshape-1106-205620-f028",
+  "code": "phase2_forward/runs/r00_draft2_v4tfshape-1106-205620-f028/solution.py",
+  "architecture": "Improve of r00_draft2_v4tf with one change, the resonator token features: ellipse shape-tensor invariants s = rx+ry, u, v = (rx-ry)cos/sin 2theta, |d| = sqrt(u^2+v^2+0.01), u/|d|, v/|d|, plus h, p. The two encodings of the same ellipse, (rx, ry, +-pi/4) and (ry, rx, -+pi/4), now give identical outputs. Everything else is unchanged: V4-exact relation-biased transformer (3 blocks, d 256, 8 heads), mean pool, 2x1024 MLP head, global_standard y, MSE, AdamW lr 8.5e-4, wd 0.05, batch 64, dropout 0.1, time-aware cosine, grad clip 1, EMA.",
+  "n_params": 6130553,
+  "gpu_time_s": 1080.59
+ },
+ {
+  "round": 1,
+  "k": 1000,
+  "action": "test",
+  "reason": "At k=500 the incumbent memorises the train split (train MSE ~2e-5) while val MSE stalls at 5.0e-3, so it is data-limited rather than capacity-limited. Re-test code_latest unchanged on a 2x larger data set (k=1000) to measure the first MSE-vs-size slope before spending more simulations.",
+  "val_mse": 0.00456720895750621,
+  "run_id": "r01_test-1106-210222-cb3c",
+  "code": "phase2_forward/runs/r01_test-1106-210222-cb3c/solution.py",
+  "architecture": "Improve of r00_draft2_v4tf with one change, the resonator token features: ellipse shape-tensor invariants s = rx+ry, u, v = (rx-ry)cos/sin 2theta, |d| = sqrt(u^2+v^2+0.01), u/|d|, v/|d|, plus h, p. The two encodings of the same ellipse, (rx, ry, +-pi/4) and (ry, rx, -+pi/4), now give identical outputs. Everything else is unchanged: V4-exact relation-biased transformer (3 blocks, d 256, 8 heads), mean pool, 2x1024 MLP head, global_standard y, MSE, AdamW lr 8.5e-4, wd 0.05, batch 64, dropout 0.1, time-aware cosine, grad clip 1, EMA.",
+  "n_params": 6130553,
+  "gpu_time_s": 180.03
+ },
+ {
+  "round": 2,
+  "k": 2000,
+  "action": "test",
+  "reason": "Doubling the data from 500 to 1000 cut val MSE by only 9% (5.02e-3 to 4.57e-3, dMSE/dsample about -9e-7), but the incumbent still memorises its train split, so it is data-limited rather than capacity-limited. With only about 45 and 91 validation samples, this first slope is too noisy to call saturation, so re-test code_latest on 2x data (k=2000) to confirm the MSE-vs-size trend before regenerating code.",
+  "val_mse": 0.0033020821736984276,
+  "run_id": "r02_test-1106-210754-4c8e",
+  "code": "phase2_forward/runs/r02_test-1106-210754-4c8e/solution.py",
+  "architecture": "Improve of r00_draft2_v4tf with one change, the resonator token features: ellipse shape-tensor invariants s = rx+ry, u, v = (rx-ry)cos/sin 2theta, |d| = sqrt(u^2+v^2+0.01), u/|d|, v/|d|, plus h, p. The two encodings of the same ellipse, (rx, ry, +-pi/4) and (ry, rx, -+pi/4), now give identical outputs. Everything else is unchanged: V4-exact relation-biased transformer (3 blocks, d 256, 8 heads), mean pool, 2x1024 MLP head, global_standard y, MSE, AdamW lr 8.5e-4, wd 0.05, batch 64, dropout 0.1, time-aware cosine, grad clip 1, EMA.",
+  "n_params": 6130553,
+  "gpu_time_s": 180.23
+ },
+ {
+  "round": 3,
+  "k": 4000,
+  "action": "test",
+  "reason": "Doubling the data from 1000 to 2000 cut val MSE by 28% (4.57e-3 to 3.30e-3). That is dMSE/dsample of about -1.3e-6, steeper than the -9e-7 of the previous doubling (local power-law exponent about -0.47), so the incumbent is still data-limited and adding data is still efficient. Re-test code_latest unchanged on a 2x larger data set (k=4000, projected val MSE about 2.4-2.7e-3); the 180 s run budget still allows roughly 250 epochs there.",
+  "val_mse": 0.002483233337757644,
+  "run_id": "r03_test-1106-211209-b002",
+  "code": "phase2_forward/runs/r03_test-1106-211209-b002/solution.py",
+  "architecture": "Improve of r00_draft2_v4tf with one change, the resonator token features: ellipse shape-tensor invariants s = rx+ry, u, v = (rx-ry)cos/sin 2theta, |d| = sqrt(u^2+v^2+0.01), u/|d|, v/|d|, plus h, p. The two encodings of the same ellipse, (rx, ry, +-pi/4) and (ry, rx, -+pi/4), now give identical outputs. Everything else is unchanged: V4-exact relation-biased transformer (3 blocks, d 256, 8 heads), mean pool, 2x1024 MLP head, global_standard y, MSE, AdamW lr 8.5e-4, wd 0.05, batch 64, dropout 0.1, time-aware cosine, grad clip 1, EMA.",
+  "n_params": 6130553,
+  "gpu_time_s": 300.72
+ },
+ {
+  "round": 4,
+  "k": 8000,
+  "action": "test",
+  "reason": "Doubling the data from 2000 to 4000 still cut val MSE by 25% (3.30e-3 to 2.48e-3; dMSE/dsample about -4.1e-7, local power-law exponent -0.41 vs -0.47 for the previous doubling), so the incumbent remains efficiently data-limited with only mild diminishing returns. Re-test code_latest unchanged on a 2x larger data set (k=8000), where the power-law trend projects about 1.9e-3, below the 2.0e-3 strict target.",
+  "val_mse": 0.0019295357140182135,
+  "run_id": "r04_test-1106-211824-7df3",
+  "code": "phase2_forward/runs/r04_test-1106-211824-7df3/solution.py",
+  "architecture": "Improve of r00_draft2_v4tf with one change, the resonator token features: ellipse shape-tensor invariants s = rx+ry, u, v = (rx-ry)cos/sin 2theta, |d| = sqrt(u^2+v^2+0.01), u/|d|, v/|d|, plus h, p. The two encodings of the same ellipse, (rx, ry, +-pi/4) and (ry, rx, -+pi/4), now give identical outputs. Everything else is unchanged: V4-exact relation-biased transformer (3 blocks, d 256, 8 heads), mean pool, 2x1024 MLP head, global_standard y, MSE, AdamW lr 8.5e-4, wd 0.05, batch 64, dropout 0.1, time-aware cosine, grad clip 1, EMA.",
+  "n_params": 6920369,
+  "gpu_time_s": 481.12
+ },
+ {
+  "round": 5,
+  "k": 16000,
+  "action": "test",
+  "reason": "Doubling the data from 4000 to 8000 still cut val MSE by 22% (2.48e-3 to 1.93e-3; dMSE/dsample about -1.4e-7; local power-law exponent -0.36, after -0.41 and -0.47 for the two doublings before), so the strict target is met and adding data is still efficient, with only slowly diminishing returns. Re-test code_latest unchanged at k=16000 (2x, projected val MSE about 1.50-1.56e-3) before spending a generate round, and switch to generate once a doubling gives clearly less than about 15%.",
+  "val_mse": 0.0017224353684278423,
+  "run_id": "r05_test-1106-212757-fd88",
+  "code": "phase2_forward/runs/r05_test-1106-212757-fd88/solution.py",
+  "architecture": "Improve of r00_draft2_v4tf with one change, the resonator token features: ellipse shape-tensor invariants s = rx+ry, u, v = (rx-ry)cos/sin 2theta, |d| = sqrt(u^2+v^2+0.01), u/|d|, v/|d|, plus h, p. The two encodings of the same ellipse, (rx, ry, +-pi/4) and (ry, rx, -+pi/4), now give identical outputs. Everything else is unchanged: V4-exact relation-biased transformer (3 blocks, d 256, 8 heads), mean pool, 2x1024 MLP head, global_standard y, MSE, AdamW lr 8.5e-4, wd 0.05, batch 64, dropout 0.1, time-aware cosine, grad clip 1, EMA.",
+  "n_params": 11562929,
+  "gpu_time_s": 720.46
+ },
+ {
+  "round": 6,
+  "k": 16000,
+  "action": "generate",
+  "reason": "Doubling the data from 8000 to 16000 cut val MSE by only 11% (1.93e-3 to 1.72e-3; dMSE/dsample about -2.6e-8, 5x lower than the previous doubling; local power-law exponent fell from -0.36 to -0.16), and extrapolating this trend over the full 50000 budget gives only about 1.43e-3, short of the 1.3e-3 stretch goal. Diminishing returns suggest the incumbent is saturating, so regenerate code with AIDE at k=16000 before acquiring more samples.",
+  "val_mse": 0.0006633598574324239,
+  "run_id": "r06_explore_patchxattn_s32-1106-221446-49f4",
+  "code": "phase2_forward/runs/r06_explore_patchxattn_s32-1106-221446-49f4/solution.py",
+  "architecture": "Improve of r06_explore_patchxattn with one change: finer spectral patches, S=32 (63 patch query tokens, renderer Linear(d->64), overlap-add stride 32). Otherwise identical: V4-relation-biased 5-token geometry encoder (2 blocks), 4-block patch decoder [self-attention with relative-position bias, cross-attention to the geometry tokens, FFN 4x], d 256, 8 heads, 6.2M params. Training: global_standard y, MSE, flip augmentation, AdamW lr 1e-3, batch 256, wd 0.05, time-aware cosine, clip 1, EMA, dropout 0.1, bf16.",
+  "n_params": 6164769,
+  "gpu_time_s": 7941.76
+ }
+]

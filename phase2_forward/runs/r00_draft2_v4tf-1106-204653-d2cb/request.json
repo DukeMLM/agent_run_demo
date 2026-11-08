@@ -1,0 +1,10 @@
+{
+ "run_id": "r00_draft2_v4tf-1106-204653-d2cb",
+ "tag": "r00_draft2_v4tf",
+ "source_code": "phase2_forward/solutions/r00_draft2_v4tf.py",
+ "code_sha256": "434d09881769479339fa09e852f531dc37d55eaaeb7043eeb75da71484e65e46",
+ "k": 500,
+ "max_train_seconds": 180.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T20:46:53-05:00"
+}

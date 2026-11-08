@@ -1,0 +1,21 @@
+{
+ "run_id": "r06_explore_patchxattn_s32-1106-221446-49f4",
+ "k": 16000,
+ "n_val": 1454,
+ "val_mse_recomputed": 0.0006633598574324239,
+ "val_mse_reported": 0.0006633598574324239,
+ "val_rel_diff": 0.0,
+ "n_params": 6164769,
+ "n_test": 5868,
+ "test_mse": 0.0006792725044060627,
+ "test_mse_median": 0.0005639771264955799,
+ "test_mse_p95": 0.0015929298172064487,
+ "test_mse_max": 0.005295226247239306,
+ "test_mse_min": 5.3619672511752784e-05,
+ "examples": {
+  "best": 2179,
+  "median": 3212,
+  "worst": 5601
+ },
+ "figure": "phase2_forward/test_examples.png"
+}

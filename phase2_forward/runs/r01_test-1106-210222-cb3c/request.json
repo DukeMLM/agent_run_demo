@@ -1,0 +1,10 @@
+{
+ "run_id": "r01_test-1106-210222-cb3c",
+ "tag": "r01_test",
+ "source_code": "phase2_forward/runs/r00_draft2_v4tfshape-1106-205620-f028/solution.py",
+ "code_sha256": "f86849c7f416dca45b964f3b47aaa4ead2190565a0bda64d36b674611327bdbb",
+ "k": 1000,
+ "max_train_seconds": 180.0,
+ "overrides": {},
+ "submitted_at": "2026-11-06T21:02:22-05:00"
+}
